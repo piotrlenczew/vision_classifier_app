@@ -20,6 +20,6 @@ def classify_image(image):
     
     with torch.no_grad():
         output = model(img)
-        predicted_class = torch.argmax(output, dim=1).item()
+        predicted_class_index = torch.argmax(output, dim=1).item()
     
-    return predicted_class  # Modify to return a class label if needed
+    return class_labels[predicted_class_index]
