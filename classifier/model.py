@@ -15,7 +15,12 @@ class_labels = models.ResNet18_Weights.IMAGENET1K_V1.meta["categories"]
 
 def classify_image(image):
     """Classify an image and return the predicted class."""
-    img = Image.open(image).convert("RGB")
+    try:
+        image = Image.open(image)
+        image.verify()
+    except Exception as e:
+        raise ValueError("Invalid image file") from e
+    img = image.convert("RGB")
     img = transform(img).unsqueeze(0)  # Add batch dimension
     
     with torch.no_grad():
