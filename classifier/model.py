@@ -8,7 +8,7 @@ model.to("cuda")  # Move to CPU
 model.eval()  # Set to evaluation mode
 
 # transformations required by the model https://pytorch.org/vision/main/models/generated/torchvision.models.resnet18.html#torchvision.models.ResNet18_Weights 
-transform = models.ResNet18_Weights.IMAGENET1K_V1.transforms
+transform = models.ResNet18_Weights.IMAGENET1K_V1.transforms()
 
 # Get class labels from the model's metadata
 class_labels = models.ResNet18_Weights.IMAGENET1K_V1.meta["categories"]
@@ -16,12 +16,11 @@ class_labels = models.ResNet18_Weights.IMAGENET1K_V1.meta["categories"]
 def classify_image(image):
     """Classify an image and return the predicted class."""
     try:
-        image = Image.open(image)
-        image.verify()
+        img = Image.open(image).convert("RGB")
     except Exception as e:
         raise ValueError("Invalid image file") from e
-    img = image.convert("RGB")
     img = transform(img).unsqueeze(0)  # Add batch dimension
+    img = img.to("cuda")  # Move to CPU
     
     with torch.no_grad():
         output = model(img)

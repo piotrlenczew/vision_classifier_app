@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from model import classify_image
+from classifier.model import classify_image
 
 @api_view(['POST'])
 def classify(request):
